@@ -14,6 +14,12 @@ const urlStruct = {
   '/': htmlHandler.getIndex,
   '/style.css': htmlHandler.getCSS,
   '/success': jsonHandler.success,
+  '/badRequest': jsonHandler.badRequest,
+  '/unauthorized': jsonHandler.unauthorized,
+  '/forbidden': jsonHandler.forbidden,
+  '/internal': jsonHandler.internalError,
+  '/notImplemented': jsonHandler.notImplemented,
+  notFound: jsonHandler.notFound,
 
 };
 
@@ -23,6 +29,9 @@ const onRequest = (request, response) => {
 
   if (urlStruct[parsedUrl.pathname]) {
     urlStruct[parsedUrl.pathname](request, response, params);
+  }
+  else {
+    urlStruct.notFound(request, response, params);
   }
 };
 

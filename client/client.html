@@ -21,9 +21,9 @@
       if(type === 'application/json') {
         const obj = JSON.parse(xhr.response);
 
-        h1.textContent = `${obj.message}`;
+        h1.textContent = `${obj.id}`;
 
-        p.textContent = `ID: ${obj.id}`; 
+        p.textContent = `Message: ${obj.message}`; 
       }
       else if (type === 'text/xml') {
 
