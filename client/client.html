@@ -6,7 +6,74 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
+    
+       //function to handle xhr response
+       const handleResponse = (xhr) => {
 
+      const type = xhr.getResponseHeader('Content-Type');
+	  
+      const content = document.querySelector("#content");
+      
+      const h1 = document.createElement('h1');
+      const p = document.createElement('p');
+      
+	  //if the response was in json
+      if(type === 'application/json') {
+        const obj = JSON.parse(xhr.response);
+
+        h1.textContent = `${obj.message}`;
+
+        p.textContent = `ID: ${obj.id}`; 
+      }
+      else if (type === 'text/xml') {
+
+        const message = xhr.responseXML.querySelector('message').textContent;
+        const id = xhr.responseXML.querySelector('id').textContent;
+		
+        h1.textContent = `${message}`;
+        p.textContent = `ID: ${id}`; 
+      }
+      
+      content.appendChild(h1);
+      content.appendChild(p);
+    };
+    
+    //function to send an xhr request
+    const sendAJAX = (url, acceptedType) => {
+
+      const xhr = new XMLHttpRequest();
+
+      xhr.open('GET', url);
+
+      xhr.setRequestHeader ("Accept", acceptedType);
+
+      xhr.onload = () => handleResponse(xhr);
+      
+      //send our ajax request to the server
+      xhr.send();
+    };
+    
+    const init = () => {
+      const page = document.querySelector("#page");
+      const returnType = document.querySelector("#type");
+      const sendButton = document.querySelector("#send");
+
+      console.dir(page.value);
+      console.dir(returnType.value);
+
+      const sendJSON = () => sendAJAX(page.value, 'application/json');
+
+      if(returnType.value === "application/json") {
+        sendButton.addEventListener('click', sendJSON);
+
+      }
+
+
+    };
+
+    window.onload = init;
+  
+  
   </script>
 </head>
 <body>
