@@ -7,78 +7,99 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
     
-       //function to handle xhr response
-       const handleResponse = (xhr) => {
+      // Function to handle xhr response
+      // from class
+      const handleResponse = (xhr) => {
 
-      const type = xhr.getResponseHeader('Content-Type');
-	  
-      const content = document.querySelector("#content");
-      
-      const h1 = document.createElement('h1');
-      const p = document.createElement('p');
-      
-	  //if the response was in json
-      if(type === 'application/json') {
-        const obj = JSON.parse(xhr.response);
-
-        h1.textContent = `${obj.id}`;
-
-        p.textContent = `Message: ${obj.message}`; 
-      }
-      else if (type === 'text/xml') {
-
-        const message = xhr.responseXML.querySelector('message').textContent;
-        const id = xhr.responseXML.querySelector('id').textContent;
-		
-        h1.textContent = `${id}`;
-        p.textContent = `Message: ${message}`; 
-      }
-      
-      content.appendChild(h1);
-      content.appendChild(p);
-    };
+        // Get the header set by the AJAX method
+        const type = xhr.getResponseHeader('Content-Type');
     
-    //function to send an xhr request
-    const sendAJAX = (url, acceptedType) => {
-
-      const xhr = new XMLHttpRequest();
-
-      xhr.open('GET', url);
-
-      xhr.setRequestHeader ("Accept", acceptedType);
-
-      xhr.onload = () => handleResponse(xhr);
+        // Get our elements
+        const content = document.querySelector("#content");
+        const h1 = document.createElement('h1');
+        const p = document.createElement('p');
       
-      //send our ajax request to the server
-      xhr.send();
-    };
+	      //if the response was in json
+        if(type === 'application/json') {
+          const obj = JSON.parse(xhr.response);
+          h1.textContent = `${obj.id}`;
+          p.textContent = `Message: ${obj.message}`; 
+        }
+
+        // If the response was in XML
+        else if (type === 'text/xml') {
+          const message = xhr.responseXML.querySelector('message').textContent;
+          const id = xhr.responseXML.querySelector('id').textContent;
+          h1.textContent = `${id}`;
+          p.textContent = `Message: ${message}`; 
+        }
+      
+        // Attach the text to the page
+        content.appendChild(h1);
+        content.appendChild(p);
+      };
     
-    const init = () => {
+    // Function to send an xhr request from class
+      const sendAJAX = (url, acceptedType) => {
+
+        // Create the object
+        const xhr = new XMLHttpRequest();
+
+        // Get request with the URL
+        xhr.open('GET', url);
+        //Figure out what type to send
+        xhr.setRequestHeader ("Accept", acceptedType);
+
+        // When the page loads, handle response and 
+        // send the request to the server
+        xhr.onload = () => handleResponse(xhr);
+        xhr.send();
+      };
+    
+
+      // Get page value, return type value, and button itself
       const page = document.querySelector("#page");
-      const returnType = document.querySelector("#type");
+      let returnType = document.querySelector("#type");
       const sendButton = document.querySelector("#send");
 
-      //console.dir(page.value);
-      //console.dir(returnType.value);
-
+      // Create the methods to send the proper value with AJAX
       const sendJSON = () => sendAJAX(page.value, 'application/json');
-      const sendXML = () => sendAJAX(page.value, 'text/xml')
+      const sendXML = () => sendAJAX(page.value, 'text/xml');
 
-      if(returnType.value === "application/json") {
-        sendButton.removeEventListener('click', sendXML);
-
-        sendButton.addEventListener('click', sendJSON);
+      // Depending on the current value, change with method to send
+      switch(returnType.value){
+        case "application/json":
+          sendButton.removeEventListener('click', sendXML);
+          sendButton.addEventListener('click', sendJSON);
+          break;
+        case "text/xml":
+          sendButton.removeEventListener('click', sendJSON);
+          sendButton.addEventListener('click', sendXML);
+          break;
+        default:
+          break;
       }
-      else if(returnType.value === "text/xml") {
-        sendButton.removeEventListener('click', sendJSON);
-        sendButton.addEventListener('click', sendXML);
+
+      // When the value changes, dynamically change the request
+      document.getElementById('type').onchange = () => {
+        
+        // Change the return value
+        returnType.value = document.querySelector("#type").value;
+
+        // Change what happens on click
+        switch(returnType.value) {
+          case "application/json":
+            sendButton.removeEventListener('click', sendXML);
+            sendButton.addEventListener('click', sendJSON);
+          break;
+          case "text/xml":
+            sendButton.removeEventListener('click', sendJSON);
+            sendButton.addEventListener('click', sendXML);
+            break;
+          default:
+            break;
+        }
       }
-
-
-
-    };
-
-    window.onload = init;
   
   
   </script>
