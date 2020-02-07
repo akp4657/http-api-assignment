@@ -30,7 +30,6 @@ const urlStruct = {
 
 // If the user asks for something
 const onRequest = (request, response) => {
-  
   // Parsing the url and parameters
   const parsedUrl = url.parse(request.url);
   const params = query.parse(parsedUrl.query);
@@ -42,9 +41,8 @@ const onRequest = (request, response) => {
   if (urlStruct[parsedUrl.pathname]) {
     // If found, call that method
     urlStruct[parsedUrl.pathname](request, response, acceptedTypes, params);
-  } 
-  // Otherwise, it's not found
-  else {
+  } else {
+    // Otherwise, it's not found
     urlStruct.notFound(request, response, acceptedTypes, params);
   }
 };

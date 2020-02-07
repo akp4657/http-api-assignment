@@ -9,7 +9,6 @@ const respond = (request, response, status, object, type) => {
 
 // Success works the same as all the other simple headers
 const success = (request, response, acceptedTypes) => {
-  
   // Create the message
   const obj = {
     id: 'Success',
@@ -34,7 +33,6 @@ const success = (request, response, acceptedTypes) => {
 
 // Bad Request and Unauthorized are essentially the same
 const badRequest = (request, response, acceptedTypes, params) => {
-  
   // Make an object to use
   const obj = {
     message: 'This request has the required parameters',
@@ -54,7 +52,7 @@ const badRequest = (request, response, acceptedTypes, params) => {
   }
 
   // Parameters check
-  else if (!params.valid || params.valid !== 'true') {
+  if (!params.valid || params.valid !== 'true') {
     obj.id = 'Bad Request';
     obj.message = 'Missing valid query parameter set to true';
 
@@ -84,11 +82,11 @@ const unauthorized = (request, response, acceptedTypes, params) => {
     return respond(request, response, 400, responseXML, 'text/xml');
   }
 
-  else if (params.loggedIn !== 'yes') {
+  if (params.loggedIn !== 'yes') {
     obj.id = 'Unauthorized';
     obj.message = 'Missing valid query parameter set to yes';
 
-    const stringedObject = JSON.stringify(obj)
+    const stringedObject = JSON.stringify(obj);
     return respond(request, response, 401, stringedObject, 'application/json');
   }
 

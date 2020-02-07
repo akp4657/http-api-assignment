@@ -1,7 +1,7 @@
 // File reader
 const fs = require('fs');
 
-// Get the files 
+// Get the files
 const index = fs.readFileSync((`${__dirname}/../client/client.html`));
 const css = fs.readFileSync(`${__dirname}/../client/style.css`);
 
