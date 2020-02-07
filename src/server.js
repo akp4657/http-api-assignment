@@ -12,7 +12,7 @@ const htmlHandler = require('./htmlResponses.js');
 const responseHandler = require('./responses.js');
 
 // Find a port to plug in to
-const port = process.env.PORT || process.env.NODE_PORT || 3010;
+const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 // Create struct of all the possible URLs
 const urlStruct = {
