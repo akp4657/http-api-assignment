@@ -30,8 +30,8 @@
         const message = xhr.responseXML.querySelector('message').textContent;
         const id = xhr.responseXML.querySelector('id').textContent;
 		
-        h1.textContent = `${message}`;
-        p.textContent = `ID: ${id}`; 
+        h1.textContent = `${id}`;
+        p.textContent = `Message: ${message}`; 
       }
       
       content.appendChild(h1);
@@ -58,15 +58,22 @@
       const returnType = document.querySelector("#type");
       const sendButton = document.querySelector("#send");
 
-      console.dir(page.value);
-      console.dir(returnType.value);
+      //console.dir(page.value);
+      //console.dir(returnType.value);
 
       const sendJSON = () => sendAJAX(page.value, 'application/json');
+      const sendXML = () => sendAJAX(page.value, 'text/xml')
 
       if(returnType.value === "application/json") {
-        sendButton.addEventListener('click', sendJSON);
+        sendButton.removeEventListener('click', sendXML);
 
+        sendButton.addEventListener('click', sendJSON);
       }
+      else if(returnType.value === "text/xml") {
+        sendButton.removeEventListener('click', sendJSON);
+        sendButton.addEventListener('click', sendXML);
+      }
+
 
 
     };
